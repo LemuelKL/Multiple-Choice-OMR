@@ -18,7 +18,7 @@ radiusDelta = 1
 centerXDelta = 1
 centerYDelta = 1
 
-# Define acceptable error
+# Define acceptable range of dimension sizes
 minCricleW = 16
 minCricleH = 16
 minCricleArea = ((minCricleW+minCricleH)/4)*((minCricleW+minCricleH)/4)*3
