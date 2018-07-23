@@ -1,3 +1,5 @@
+# Copied directly from https://stackoverflow.com/questions/5501192/how-to-display-picture-and-get-mouse-click-coordinate-on-it
+
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 
