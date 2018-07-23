@@ -1,7 +1,0 @@
-same y coord, similar x coord
-
-for x coord similarity check, do
-	take first question x,
-	take all cirlces with the same y as first question
-	then increase it by radius, and then loop to slowly increase until first hit other circle
-	
