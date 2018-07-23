@@ -99,7 +99,7 @@ def isCircleChecked(mcOption, image):
     if m[0] < 160:
         mcOption.isChecked = True
 
-image = cv2.imread("11.png")
+image = cv2.imread("imgs/12.png")
 circleContours, nCirlces = findCircleContours(image)
 
 # Initialize a list of objects -------------------->
@@ -161,7 +161,7 @@ def createList(k):
     for i in range(k): 
         mylist.append(i)
     return mylist
-K = 3    # K should be the number of questions. This doesn't neccessarily need to be a known value, could be dereived by the "elbow" method but thats over-complicated
+K = 4    # K should be the number of questions. This doesn't neccessarily need to be a known value, could be dereived by the "elbow" method but thats over-complicated
 C = createList(K)   # Create a list of centroids, centroids is the centroid of each cluster, each cluster is basically a group of mcOptions, a question in another word
 height, width, _ = image.shape
 # Randomly pick K number of centroids
