@@ -1,5 +1,3 @@
-# Updated on 20180721-1607
-
 # Just importing libraries
 import cv2
 import numpy as np
