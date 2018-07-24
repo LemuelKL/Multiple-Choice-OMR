@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import random
 import math
 from PDF_to_PNG import convertPDF
+import os
+import time
 
 radii = []
 # Define acceptable error
@@ -94,13 +96,19 @@ def isCircleChecked(mcOption, image):
     if m[0] < 160:
         mcOption.isChecked = True
 
+################################################################################
+imgFolder = "./imgs"
+if not os.path.exists(imgFolder):
+    os.makedirs(imgFolder)
 PDFName = input("Please enter the filename of the PDF template: ")
-convertPDF(PDFName, "imgs")
+imgPath = imgFolder + "/" + time.strftime("%Y%m%d-%H%M%S") + "-" + PDFName[:-4]
+os.makedirs(imgPath)
+convertPDF(PDFName, imgPath)
 PNGName = PDFName[:-4]
 PNGName = PNGName + ".png"
-print(PNGName)
 image = cv2.imread("imgs/12.png")
 circleContours, nCirlces = findCircleContours(image)
+################################################################################
 
 # Initialize a list of objects
 mcOptions_ObjList = []

@@ -24,5 +24,5 @@ def convertPDF(filename, output_path, resolution=300):
             image_filename = os.path.splitext(os.path.basename(filename))[0]
             image_filename = '{}-{}.png'.format(image_filename, i)
             image_filename = os.path.join(output_path, image_filename)
-
+            print("Converted to: ", image_filename)
             img.save(filename=image_filename)
