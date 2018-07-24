@@ -1,4 +1,3 @@
-# Just importing libraries
 import cv2
 import numpy as np
 from collections import Counter
@@ -43,10 +42,9 @@ class _mcOption:
         self.centerX, self.centerY, self.radius = extractFromCricleContour(circleContour)
     
 def extractFromCricleContour(circleContour):
-    (x, y, w, h) = cv2.boundingRect(circleContour)	# This boudingRect function in opencv takes in a "contour" datatype.
-    return [x+w/2, y+h/2, w/2]				        # and return 4 values that form a bouding rectangle of the contour.
+    (x, y, w, h) = cv2.boundingRect(circleContour)  # This boudingRect function in opencv takes in a "contour" datatype.
+    return [x+w/2, y+h/2, w/2]                      # and return 4 values that form a bouding rectangle of the contour.
 
-# Just using opencv functions to grayscale, demoise the image.    
 def processImage(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurry = cv2.GaussianBlur(gray, (3, 3), 1)
@@ -68,8 +66,8 @@ def findCircleContours(image):
     circleContours = []
     i = 0
     nCirlces = 0    
-    # Looping over contours one by one till the end, and for each contour, check if it satisfy our rules to be considered as a 
-    # valid circle, if it's valid, add this contour to the list "circleContours for storage".
+    # Looping over contours one by one till the end, and for each contour, check if it satisfy our rules to be 
+    # considered as a valid circle, if it's valid, add this contour to the list "circleContours for storage".
     for contour in contours:       
         (x, y, w, h) = cv2.boundingRect(contour)
         ar = w / float(h)
@@ -157,14 +155,13 @@ for image in images:
     plt.gca().invert_yaxis()
     plt.show()
 
-############################################################################################################################################
-    # The followings use the K-Means Clustering algorithm, this works perfectly when all questions contain the same amount of options, 
-    # each options are evenly distrubuted, and each questions are evenly distributed and the distance between each questions should be 
-    # larger then that of betweening mcOptions.
+#########################################################################################################################
+    # The followings use the K-Means Clustering algorithm, this works perfectly when all questions contain the same 
+    # amount of options, each options are evenly distrubuted, and each questions are evenly distributed and the distance 
+    # between each questions should be larger then that of betweening mcOptions.
 
     # NOTE: Such implementation is still experimental and is very unreliable at this stage.
 
-    # K-means clustering of questions
     def distance(p0, p1):
         return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
     def average(x, y):
@@ -178,14 +175,15 @@ for image in images:
         for i in range(k): 
             mylist.append(i)
         return mylist
-    K = 4    # K should be the number of questions.
+        
+    # K-means clustering of questions    
+    K = 4
     C = createList(K)
     height, width, _ = image.shape
-    # Randomly pick K number of centroids.
     for i in range(0, K):
         C[i] = ([random.randint(0,width), random.randint(0,height)])
 
-    # This big loop is the algorithmic representation of K-Means Clustering.
+    # Cluster optimization
     lastC = None
     while (True):
         # Assign each mcOption to the nearest centroid.
@@ -201,8 +199,8 @@ for image in images:
         for mcOption in mcOptions_ObjList[:]:
             print("[MC option] - ID: ", mcOption.ID, "\t- cluster ID: ", mcOption.centroidID)
 
-        # Calculate new centroid for each cluster by taking the mean of the distances between each point and their assigned centroid within that cluster
-        # untill no possible new centroid can be calculated.
+        # Calculate new centroid for each cluster by taking the mean of the distances between each point and their 
+        # assigned centroid within that cluster untill no possible new centroid can be calculated.
         for j in range(0, K):
             C[j] = average([mcOption.centerX for mcOption in mcOptions_ObjList if mcOption.centroidID == j], [mcOption.centerY for mcOption in mcOptions_ObjList if mcOption.centroidID == j])
         if (C == lastC):
