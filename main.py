@@ -9,6 +9,7 @@ import sys
 import matplotlib.pyplot as plt
 import random
 import math
+from PDF_to_PNG import convertPDF
 
 radii = []
 # Define acceptable error
@@ -93,6 +94,11 @@ def isCircleChecked(mcOption, image):
     if m[0] < 160:
         mcOption.isChecked = True
 
+PDFName = input("Please enter the filename of the PDF template: ")
+convertPDF(PDFName, "imgs")
+PNGName = PDFName[:-4]
+PNGName = PNGName + ".png"
+print(PNGName)
 image = cv2.imread("imgs/12.png")
 circleContours, nCirlces = findCircleContours(image)
 
