@@ -62,7 +62,7 @@ def findCircleContours(image):
     cv2.imshow("Contours", image)
     cv2.waitKey(0)
     
-    hierarchy = hierarchy[0]    # Initializing the list
+    hierarchy = hierarchy[0]
     circleContours = []
     i = 0
     nCirlces = 0    
@@ -95,6 +95,7 @@ def isCircleChecked(mcOption, image):
         mcOption.isChecked = True
 
 ################################################################################
+
 imgFolder = "./imgs"
 if not os.path.exists(imgFolder):
     os.makedirs(imgFolder)
@@ -106,10 +107,13 @@ images = []
 for name in pngNames:
     print(imgPath + name)
     images.append(cv2.imread(imgPath + "/" + name))
-################################################################################
     
+################################################################################
+
+currentPage = 0    
 for image in images:
-    input("Press <ENTER> to begin processing the current page: ")
+    currentPage = currentPage + 1
+    input("Press <ENTER> to begin processing the current page [" + str(currentPage) + "]: ")
     circleContours, nCirlces = findCircleContours(image)
 
     # Initialize objects
@@ -155,7 +159,7 @@ for image in images:
     plt.gca().invert_yaxis()
     plt.show()
 
-#########################################################################################################################
+    #####################################################################################################################
     # The followings use the K-Means Clustering algorithm, this works perfectly when all questions contain the same 
     # amount of options, each options are evenly distrubuted, and each questions are evenly distributed and the distance 
     # between each questions should be larger then that of betweening mcOptions.
