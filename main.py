@@ -14,15 +14,10 @@ radii = []
 # Define acceptable error
 radiusDelta = 1
 
-# Assuming lines connecting MC options' centers within a question is
-centerXDelta = 1
-centerYDelta = 1
-
-# Define acceptable range of dimension sizes
+# Define acceptable range of dimension sizes, 15-20 usually
 minCricleW = 16
 minCricleH = 16
 minCricleArea = ((minCricleW+minCricleH)/4)*((minCricleW+minCricleH)/4)*3
-print(minCricleArea)
 
 # Declaring a mcOption class which its objects should each have 9 attributes
 class mcOption:
@@ -35,8 +30,7 @@ class mcOption:
     radius = None
     isChecked = False
     centroidID = None
-    # This is a python built-in "init" function which enable us to make objects in a way similar to calling a fuinction.
-    # eg.: thisIsAObject = mcOption(1, 1, 1)
+    
     def __init__(self, ID, questionID, optionID):
     	# Assigning object attribute with recieved parameter values in the bracket
         self.ID = ID
@@ -102,14 +96,14 @@ def isCircleChecked(mcOption, image):
 image = cv2.imread("imgs/12.png")
 circleContours, nCirlces = findCircleContours(image)
 
-# Initialize a list of objects -------------------->
+# Initialize a list of objects
 mcOptions_ObjList = []
 for i in range(nCirlces):
     aMcOption = mcOption(nCirlces-i, None, None)
     aMcOption.initCenters(circleContours[i])
     mcOptions_ObjList.append(aMcOption)
     
-# Further filter out non-mcOption cirlces by calculating the mode of radius of all previously detected circles--------->
+# Further filter out non-mcOption cirlces by calculating the mode of radius of all previously detected circles
 mcOptions_ObjList = sorted(mcOptions_ObjList , key=lambda k: [k.centerY, k.centerX]) 
 for i in range(nCirlces):
     radii.append(mcOptions_ObjList[i].radius)
@@ -124,7 +118,7 @@ nCirlces = nCirlces - removed
 for i in range(nCirlces):
     isCircleChecked(mcOptions_ObjList[i], image)
     
-# Show results ------------------------------------>
+# Show results
 del circleContours[:]
 for mcOption in mcOptions_ObjList[:]:
     circleContours.append(mcOption.circleContour)
@@ -145,9 +139,10 @@ plt.gca().invert_yaxis()
 plt.show()
 
 # The followings use the K-Means Clustering algorithm, this works perfectly when all questions contain the same amount of options, 
-# each options are evenly distrubuted, and each questions are evenly distributed and the distance between each questions should be larger then that of betweening mcOptions
+# each options are evenly distrubuted, and each questions are evenly distributed and the distance between each questions should be 
+# larger then that of betweening mcOptions
 
-# K-means clustering of questions ----------------->
+# K-means clustering of questions
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
 def average(x, y):
@@ -161,18 +156,16 @@ def createList(k):
     for i in range(k): 
         mylist.append(i)
     return mylist
-K = 4    # K should be the number of questions. This doesn't neccessarily need to be a known value, could be dereived by the "elbow" method but thats over-complicated
-C = createList(K)   # Create a list of centroids, centroids is the centroid of each cluster, each cluster is basically a group of mcOptions, a question in another word
+K = 4    # K should be the number of questions.
+C = createList(K)   # Create a list of centroids, centroids is the centroid of each cluster, each cluster is a group of mcOptions, a question in another word
 height, width, _ = image.shape
 # Randomly pick K number of centroids
 for i in range(0, K):
-    C[i] = ( [random.randint(0,width), random.randint(0,height)] )
+    C[i] = ([random.randint(0,width), random.randint(0,height)])
 
 # This big loop is the algorithmic representation of K-Means Clustering
 lastC = None
 while (True):
-    print("==================================================")
-    #input("Press Enter to continue...")
     # Assign each mcOption to the nearest centroid
     nPoints = len(mcOptions_ObjList)
     print("Number of MC options: ", nPoints)
@@ -187,10 +180,9 @@ while (True):
         print("[MC option] - ID: ", mcOption.ID, "\t- cluster ID: ", mcOption.centroidID)
 
     # Calculate new centroid for each cluster by taking the mean of the distances between each point and their assigned centroid within that cluster
+    # untill no possible new centroid can be calculated
     for j in range(0, K):
         C[j] = average([mcOption.centerX for mcOption in mcOptions_ObjList if mcOption.centroidID == j], [mcOption.centerY for mcOption in mcOptions_ObjList if mcOption.centroidID == j])
-    print("Location of Last Centroids: ", lastC) 
-    print("Location of New Centroids: ", C)
     if (C == lastC):
-        break   # The algorithm is done and we exit the loop once no changes if all locations of centroids is found
+        break
     lastC = C.copy()
