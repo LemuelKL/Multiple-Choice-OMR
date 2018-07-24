@@ -8,7 +8,7 @@ This program is developed in Python3, and requires the following libraries:
 4.  Tkinker
 
 ## Usage
-To run the program:
-**Arch** >> python main.py
-**Debian** >> python3 main.py
-**Windows** >> py main.py
+To run the program:  
+**Arch** >> python main.py  
+**Debian** >> python3 main.py  
+**Windows** >> py main.py  
