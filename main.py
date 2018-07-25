@@ -6,11 +6,10 @@ from statistics import mode
 from pprint import pprint
 import sys
 import matplotlib.pyplot as plt
-import random
-import math
 from PDF_to_PNG import convertPDF
 import os
 import time
+import kMean
 
 radii = []
 # Define acceptable error
@@ -42,7 +41,7 @@ class _mcOption:
         self.centerX, self.centerY, self.radius = extractFromCricleContour(circleContour)
     
 def extractFromCricleContour(circleContour):
-    (x, y, w, h) = cv2.boundingRect(circleContour)  # This boudingRect function in opencv takes in a "contour" datatype.
+    (x, y, w, h) = cv2.boundingRect(circleContour)  # This boudingRect function in opencv takes in a "contour" datatype
     return [x+w/2, y+h/2, w/2]                      # and return 4 values that form a bouding rectangle of the contour.
 
 def processImage(image):
@@ -94,6 +93,19 @@ def isCircleChecked(mcOption, image):
     if m[0] < 160:
         mcOption.isChecked = True
 
+def filterBadCricles(objList):
+    initN = len(objList)
+    objList = sorted(objList , key=lambda k: [k.centerY, k.centerX]) 
+    for i in range(nCirlces):
+        radii.append(objList[i].radius)
+    radiiMode = mode(radii)
+    removed = 0
+    for mcOption in objList[:]:
+        if not ( mcOption.radius - radiusDelta < radiiMode and mcOption.radius + radiusDelta > radiiMode ):
+            objList.remove(mcOption)
+            removed = removed + 1
+    return [objList, initN - removed]
+
 ################################################################################
 
 imgFolder = "./imgs"
@@ -110,32 +122,24 @@ for name in pngNames:
     
 ################################################################################
 
+mcOptions_ObjList = []
 currentPage = 0    
 for image in images:
     currentPage = currentPage + 1
     input("Press <ENTER> to begin processing the current page [" + str(currentPage) + "]: ")
     circleContours, nCirlces = findCircleContours(image)
 
+    del mcOptions_ObjList[:]
     # Initialize objects
-    mcOptions_ObjList = []
     for i in range(nCirlces):
-        aMcOption = None
-        aMcOption = _mcOption(nCirlces-i, None, None)
-        aMcOption.initCenters(circleContours[i])
-        mcOptions_ObjList.append(aMcOption)
+        instance = None
+        instance = _mcOption(nCirlces-i, None, None)
+        instance.initCenters(circleContours[i])
+        mcOptions_ObjList.append(instance)
         
-    # Further filter out non-mcOption cirlces by calculating the mode of radius of all detected circles.
-    mcOptions_ObjList = sorted(mcOptions_ObjList , key=lambda k: [k.centerY, k.centerX]) 
-    for i in range(nCirlces):
-        radii.append(mcOptions_ObjList[i].radius)
-    radiiMode = mode(radii)
-    removed = 0
-    for mcOption in mcOptions_ObjList[:]:
-        if not (mcOption.radius - radiusDelta < radiiMode and mcOption.radius + radiusDelta > radiiMode):
-            mcOptions_ObjList.remove(mcOption)
-            removed = removed + 1
-    nCirlces = nCirlces - removed
-
+    mcOptions_ObjList, nCirlces = filterBadCricles(mcOptions_ObjList)
+    
+    # Check to see if cricle is checked
     for i in range(nCirlces):
         isCircleChecked(mcOptions_ObjList[i], image)
         
@@ -152,61 +156,11 @@ for image in images:
 
     x  = [mcOption.centerX for mcOption in mcOptions_ObjList]
     y  = [mcOption.centerY for mcOption in mcOptions_ObjList]
-    cx = [mcOption.centerX for mcOption in mcOptions_ObjList if mcOption.isChecked == True]
-    cy = [mcOption.centerY for mcOption in mcOptions_ObjList if mcOption.isChecked == True]
+    cx = [mcOption.centerX for mcOption in mcOptions_ObjList if mcOption.isChecked == True] #checked
+    cy = [mcOption.centerY for mcOption in mcOptions_ObjList if mcOption.isChecked == True] #checked
     plt.scatter(x, y, label='MC options dected')
     plt.scatter(cx, cy, c='r', label='Checked MC options')
     plt.gca().invert_yaxis()
     plt.show()
 
-    #####################################################################################################################
-    # The followings use the K-Means Clustering algorithm, this works perfectly when all questions contain the same 
-    # amount of options, each options are evenly distrubuted, and each questions are evenly distributed and the distance 
-    # between each questions should be larger then that of betweening mcOptions.
-
-    # NOTE: Such implementation is still experimental and is very unreliable at this stage.
-
-    def distance(p0, p1):
-        return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
-    def average(x, y):
-        if sum(x) == 0:
-            x = [0, 0.1]
-        if sum(y) == 0:
-            y = [0, 0.1]
-        return [sum(x)/len(x), sum(y)/len(y)]
-    def createList(k):
-        mylist = []
-        for i in range(k): 
-            mylist.append(i)
-        return mylist
-        
-    # K-means clustering of questions    
-    K = 4
-    C = createList(K)
-    height, width, _ = image.shape
-    for i in range(0, K):
-        C[i] = ([random.randint(0,width), random.randint(0,height)])
-
-    # Cluster optimization
-    lastC = None
-    while (True):
-        # Assign each mcOption to the nearest centroid.
-        nPoints = len(mcOptions_ObjList)
-        print("Number of MC options: ", nPoints)
-        for i in range(0, nPoints):
-            nearestCentroidDistance = 69696969
-            for j in range(0, K):
-                dist = distance( [mcOptions_ObjList[i].centerX, mcOptions_ObjList[i].centerY], C[j])
-                if ( dist < nearestCentroidDistance):
-                    nearestCentroidDistance = dist
-                    mcOptions_ObjList[i].centroidID = j               
-        for mcOption in mcOptions_ObjList[:]:
-            print("[MC option] - ID: ", mcOption.ID, "\t- cluster ID: ", mcOption.centroidID)
-
-        # Calculate new centroid for each cluster by taking the mean of the distances between each point and their 
-        # assigned centroid within that cluster untill no possible new centroid can be calculated.
-        for j in range(0, K):
-            C[j] = average([mcOption.centerX for mcOption in mcOptions_ObjList if mcOption.centroidID == j], [mcOption.centerY for mcOption in mcOptions_ObjList if mcOption.centroidID == j])
-        if (C == lastC):
-            break
-        lastC = C.copy()
+    kMean.kMeanClustering(image, mcOptions_ObjList)
