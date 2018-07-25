@@ -127,6 +127,7 @@ currentPage = 0
 for image in images:
     currentPage = currentPage + 1
     input("Press <ENTER> to begin processing the current page [" + str(currentPage) + "]: ")
+    
     circleContours, nCirlces = findCircleContours(image)
 
     del mcOptions_ObjList[:]

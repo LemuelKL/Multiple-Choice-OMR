@@ -28,15 +28,15 @@ def kMeanClustering(image, objList):
     C = []
     height, width, _ = image.shape
     for i in range(0, K):
-        C.append([random.randint(0,width), random.randint(0,height)])
+        C.append( [random.randint(0, width), random.randint(0, height)] )
     # Cluster optimization
     nPoints = len(objList)
-    print("Number of MC options: ", nPoints)
+    print("Number of MC options on this page: ", nPoints)
     lastC = None
     while (True):
         # Assign each mcOption to the nearest centroid.
         for i in range(0, nPoints):
-            nearestCentroidDistance = 69696969
+            nearestCentroidDistance = 99999999
             for j in range(0, K):
                 print("J: ", j)
                 print("C[j]: ", C[j])
@@ -45,7 +45,7 @@ def kMeanClustering(image, objList):
                     nearestCentroidDistance = dist
                     objList[i].centroidID = j               
         for mcOption in objList[:]:
-            print("[MC option] - ID: ", mcOption.ID, "\t- cluster ID: ", mcOption.centroidID)
+            print("[MC option] - ID: ", mcOption.ID, "\t- Assigned cluster ID: ", mcOption.centroidID)
 
         # Calculate new centroid for each cluster by taking the mean of the distances between each point and their 
         # assigned centroid within that cluster untill no possible new centroid can be calculated.
