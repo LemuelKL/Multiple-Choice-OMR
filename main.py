@@ -1,9 +1,6 @@
 import cv2
 import numpy as np
-from collections import Counter
-import itertools
 from statistics import mode
-from pprint import pprint
 import sys
 import matplotlib.pyplot as plt
 from PDF_to_PNG import convertPDF
@@ -120,7 +117,8 @@ def makeMCs(nCirlces):
 imgFolder = "./imgs"
 if not os.path.exists(imgFolder):
     os.makedirs(imgFolder)
-pdfName = input("Please enter the filename of the PDF template: ")
+while( os.path.isfile(input("Please enter the filename of the PDF template: ")) == False ):
+    print("FILE DOES NOT EXIST! Please Try Again!")
 imgPath = imgFolder + "/" + time.strftime("%Y%m%d-%H%M%S") + "-" + pdfName[:-4]
 os.makedirs(imgPath)
 nPage, pngNames = convertPDF(pdfName, imgPath)
@@ -147,8 +145,7 @@ for image in images:
     # Show results
     del circleContours[:]
     for mcOption in mcOptions_ObjList[:]:
-        circleContours.append(mcOption.circleContour)
-        
+        circleContours.append(mcOption.circleContour)        
     cv2.drawContours(image, circleContours,  -1, (0,0,255), 1)
     print(nCirlces, "Circles Detected")
     cv2.imshow('Circles Detected',image)

@@ -22,8 +22,7 @@ def average(x, y):
         retY = sum(y)/len(y)
     return [retX, retY]
        
-def kMeanClustering(image, objList):
-    input("cluster begin")    
+def kMeanClustering(image, objList): 
     K = 4
     C = []
     height, width, _ = image.shape
@@ -38,8 +37,6 @@ def kMeanClustering(image, objList):
         for i in range(0, nPoints):
             nearestCentroidDistance = 99999999
             for j in range(0, K):
-                print("J: ", j)
-                print("C[j]: ", C[j])
                 dist = distance( [objList[i].centerX, objList[i].centerY], C[j] )
                 if (dist < nearestCentroidDistance):
                     nearestCentroidDistance = dist
