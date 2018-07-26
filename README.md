@@ -22,7 +22,8 @@ To run the program:
   - Denoise the image.
   - Find all contours in the image.
   - Filter and keep only those contours that qualified to be MC options.
-  - Draw and show the user the identified MC options
+  - Transform contours into meaningful X-Y coordinates.
+  - Draw and show the user the identified MC options.
   - Use the K-Means Clustering algorithm to group MC options into questions
   - Print to show which group of question each option is assigned to.
   
