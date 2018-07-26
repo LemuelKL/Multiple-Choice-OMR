@@ -105,6 +105,15 @@ def filterBadCricles(objList):
             objList.remove(mcOption)
             removed = removed + 1
     return [objList, initN - removed]
+    
+def makeMCs(nCirlces):
+    mcOptions_ObjList = []
+    for i in range(nCirlces):
+        instance = None
+        instance = _mcOption(nCirlces-i, None, None)
+        instance.initCenters(circleContours[i])
+        mcOptions_ObjList.append(instance)
+    return mcOptions_ObjList
 
 ################################################################################
 
@@ -122,22 +131,13 @@ for name in pngNames:
     
 ################################################################################
 
-mcOptions_ObjList = []
 currentPage = 0    
 for image in images:
     currentPage = currentPage + 1
     input("Press <ENTER> to begin processing the current page [" + str(currentPage) + "]: ")
     
     circleContours, nCirlces = findCircleContours(image)
-
-    del mcOptions_ObjList[:]
-    # Initialize objects
-    for i in range(nCirlces):
-        instance = None
-        instance = _mcOption(nCirlces-i, None, None)
-        instance.initCenters(circleContours[i])
-        mcOptions_ObjList.append(instance)
-        
+    mcOptions_ObjList = makeMCs(nCirlces)        
     mcOptions_ObjList, nCirlces = filterBadCricles(mcOptions_ObjList)
     
     # Check to see if cricle is checked
