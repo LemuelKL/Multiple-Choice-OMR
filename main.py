@@ -15,7 +15,7 @@ radiusDelta = 1
 # Define acceptable range of dimension sizes, 15-20 usually.
 minCricleW = 16
 minCricleH = 16
-minCricleArea = ((minCricleW+minCricleH)/4)*((minCricleW+minCricleH)/4)*3
+minCricleArea = ((minCricleW+minCricleH)/4)*((minCricleW+minCricleH)/4)*3.1
 
 class _mcOption:
     ID = None
@@ -113,20 +113,25 @@ def makeMCs(nCirlces):
     return mcOptions_ObjList
 
 ################################################################################
-
-imgFolder = "./imgs"
-if not os.path.exists(imgFolder):
-    os.makedirs(imgFolder)
-while( os.path.isfile(input("Please enter the filename of the PDF template: ")) == False ):
-    print("FILE DOES NOT EXIST! Please Try Again!")
-imgPath = imgFolder + "/" + time.strftime("%Y%m%d-%H%M%S") + "-" + pdfName[:-4]
-os.makedirs(imgPath)
-nPage, pngNames = convertPDF(pdfName, imgPath)
-images = []
-for name in pngNames:
-    print(imgPath + name)
-    images.append(cv2.imread(imgPath + "/" + name))
-    
+print("[1]Multi-page PDD")
+print("[2]Single PNG")
+_mode = input("[?] = ")
+if _mode == "1":
+    imgFolder = "./imgs"
+    if not os.path.exists(imgFolder):
+        os.makedirs(imgFolder)
+    while( os.path.isfile(input("Please enter the filename of the PDF template: ")) == False ):
+        print("FILE DOES NOT EXIST! Please Try Again!")
+    imgPath = imgFolder + "/" + time.strftime("%Y%m%d-%H%M%S") + "-" + pdfName[:-4]
+    os.makedirs(imgPath)
+    nPage, pngNames = convertPDF(pdfName, imgPath)
+    images = []
+    for name in pngNames:
+        print(imgPath + name)
+        images.append(cv2.imread(imgPath + "/" + name))
+if _mode == "2":
+    images = []
+    images.append(cv2.imread("imgs/Test1.png"))      
 ################################################################################
 
 currentPage = 0    
@@ -161,4 +166,12 @@ for image in images:
     plt.gca().invert_yaxis()
     plt.show()
 
-    kMean.kMeanClustering(image, mcOptions_ObjList)
+    groupedList, K, height, width = kMean.kMeanClustering(image, mcOptions_ObjList, 5)
+    for i in range(0, K):
+        plotx = [mcOption.centerX for mcOption in groupedList if mcOption.centroidID == i]
+        ploty = [mcOption.centerY for mcOption in groupedList if mcOption.centroidID == i]
+        plt.scatter(plotx,ploty,label=i)
+        plt.xlim(0, width)
+        plt.ylim(0, height)
+        plt.gca().invert_yaxis()
+        plt.show()

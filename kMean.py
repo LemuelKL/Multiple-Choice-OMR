@@ -22,8 +22,7 @@ def average(x, y):
         retY = sum(y)/len(y)
     return [retX, retY]
        
-def kMeanClustering(image, objList): 
-    K = 4
+def kMeanClustering(image, objList, K): 
     C = []
     height, width, _ = image.shape
     for i in range(0, K):
@@ -51,3 +50,5 @@ def kMeanClustering(image, objList):
         if (C == lastC):
             break
         lastC = C.copy()
+    return [objList, K, height, width]
+    
