@@ -7,7 +7,7 @@ This program is developed in Python3, and requires the following libraries:
 1.  OpenCV
 2.  Numpy
 3.  MatPlotLib
-4.  Tkinker
+4.  Tkinker	(only if you want to use mouseInteract.pys)
 
 ## Usage
 To run the program:  
