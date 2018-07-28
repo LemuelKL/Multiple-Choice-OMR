@@ -1,0 +1,12 @@
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Multiple-Choice-OMR.exe.config
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Multiple-Choice-OMR.exe
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Multiple-Choice-OMR.pdb
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Multiple-Choice-OMR.xml
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.vbprojAssemblyReference.cache
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple_Choice_OMR.Form1.resources
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple_Choice_OMR.Resources.resources
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.vbproj.GenerateResource.cache
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.vbproj.CoreCompileInputs.cache
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.exe
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.xml
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.pdb
