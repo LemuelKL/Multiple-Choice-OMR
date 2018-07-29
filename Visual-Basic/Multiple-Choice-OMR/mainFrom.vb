@@ -9,6 +9,8 @@ Imports Emgu.CV.UI
 Imports Emgu.Util
 Imports Emgu.CV.Structure
 Imports Emgu.CV.CvEnum
+Imports iTextSharp
+Imports iTextSharp.text.pdf
 
 Public Class MainForm
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -37,28 +39,37 @@ Namespace PDF2Images
     Class Program
         Shared outputFolder As String = "D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\outputFolder\"
 
+        Public Shared Sub GetPdfNumberOfPages(ByVal PdfPath As String, ByRef nPages As Integer)
+            Dim pdf As PdfReader = New PdfReader(PdfPath)
+            nPages = pdf.NumberOfPages
+        End Sub
+
         Public Shared Sub Main()
             Dim pdfFiles = Directory.GetFiles("D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\outputFolder\", "*.pdf")
-
             For Each pdfFile In pdfFiles
                 Dim fileName = Path.GetFileNameWithoutExtension(pdfFile)
                 PdfToPng(pdfFile, fileName)
             Next
-
-            'Console.ReadKey()
         End Sub
 
         Private Shared Sub PdfToPng(ByVal inputFile As String, ByVal outputFileName As String)
             Dim xDpi = 100
             Dim yDpi = 100
-            Dim pageNumber = 1
+            Dim nPages As Integer
+            GetPdfNumberOfPages(inputFile, nPages)
+            MessageBox.Show(nPages)
 
             Using rasterizer = New GhostscriptRasterizer()
                 rasterizer.Open(inputFile)
-                Dim outputPNGPath = Path.Combine(outputFolder, String.Format("{0}.png", outputFileName))
-                Dim pdf2PNG = rasterizer.GetPage(xDpi, yDpi, pageNumber)
-                pdf2PNG.Save(outputPNGPath, ImageFormat.Png)
+                For index As Integer = 1 To nPages
+                    Dim currentPageFileName As String = outputFileName + "-" + CStr(index)
+                    Dim outputPNGPath = Path.Combine(outputFolder, String.Format("{0}.png", currentPageFileName))
+                    Dim pdf2PNG = rasterizer.GetPage(xDpi, yDpi, nPages)
+                    pdf2PNG.Save(outputPNGPath, ImageFormat.Png)
+                Next
+
             End Using
         End Sub
     End Class
 End Namespace
+

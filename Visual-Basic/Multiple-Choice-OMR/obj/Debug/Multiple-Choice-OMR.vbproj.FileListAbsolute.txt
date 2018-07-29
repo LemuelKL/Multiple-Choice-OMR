@@ -43,3 +43,5 @@ D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choic
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Ghostscript.NET.dll
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Ghostscript.NET.xml
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\gsdll32.dll
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\itextsharp.dll
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\itextsharp.xml
