@@ -38,7 +38,7 @@ Partial Class MainForm
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(86, 23)
         Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Choose Image"
+        Me.Button1.Text = "Choose PDF"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'PictureBox1

@@ -22,12 +22,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PDF2Images.Program.Main()
-
         OpenFileDialog1.ShowDialog()
         imgPath_TextBox.Text = OpenFileDialog1.FileName
-        PictureBox1.ImageLocation = imgPath_TextBox.Text
 
+        PDF2Images.Program.PdfToPng(imgPath_TextBox.Text)
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles imgPath_TextBox.TextChanged
@@ -37,37 +35,29 @@ End Class
 
 Namespace PDF2Images
     Class Program
-        Shared outputFolder As String = "D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\outputFolder\"
-
         Public Shared Sub GetPdfNumberOfPages(ByVal PdfPath As String, ByRef nPages As Integer)
             Dim pdf As PdfReader = New PdfReader(PdfPath)
             nPages = pdf.NumberOfPages
         End Sub
 
-        Public Shared Sub Main()
-            Dim pdfFiles = Directory.GetFiles("D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\outputFolder\", "*.pdf")
-            For Each pdfFile In pdfFiles
-                Dim fileName = Path.GetFileNameWithoutExtension(pdfFile)
-                PdfToPng(pdfFile, fileName)
-            Next
-        End Sub
-
-        Private Shared Sub PdfToPng(ByVal inputFile As String, ByVal outputFileName As String)
+        Public Shared Sub PdfToPng(ByVal inputFilePath As String)
+            Dim outputDirectory As String
+            outputDirectory = Path.GetDirectoryName(inputFilePath)
+            Dim inputFileName As String
+            inputFileName = Path.GetFileName(inputFilePath)
             Dim xDpi = 100
             Dim yDpi = 100
             Dim nPages As Integer
-            GetPdfNumberOfPages(inputFile, nPages)
-            MessageBox.Show(nPages)
+            GetPdfNumberOfPages(inputFilePath, nPages)
 
             Using rasterizer = New GhostscriptRasterizer()
-                rasterizer.Open(inputFile)
+                rasterizer.Open(inputFilePath)
                 For index As Integer = 1 To nPages
-                    Dim currentPageFileName As String = outputFileName + "-" + CStr(index)
-                    Dim outputPNGPath = Path.Combine(outputFolder, String.Format("{0}.png", currentPageFileName))
-                    Dim pdf2PNG = rasterizer.GetPage(xDpi, yDpi, nPages)
+                    Dim currentPageFileName As String = inputFileName + "-" + CStr(index)
+                    Dim outputPNGPath = Path.Combine(outputDirectory, String.Format("{0}.png", currentPageFileName))
+                    Dim pdf2PNG = rasterizer.GetPage(xDpi, yDpi, index)
                     pdf2PNG.Save(outputPNGPath, ImageFormat.Png)
                 Next
-
             End Using
         End Sub
     End Class
