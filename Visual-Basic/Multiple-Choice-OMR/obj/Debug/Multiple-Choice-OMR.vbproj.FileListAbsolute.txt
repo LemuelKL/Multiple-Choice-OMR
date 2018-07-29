@@ -40,3 +40,6 @@ D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choic
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\zh-cn\ZedGraph.resources.dll
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\zh-tw\ZedGraph.resources.dll
 D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\obj\Debug\Multiple-Choice-OMR.vbproj.CopyComplete
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Ghostscript.NET.dll
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\Ghostscript.NET.xml
+D:\Users\Lemuel\Documents\GitHub\Multiple-Choice-OMR\Visual-Basic\Multiple-Choice-OMR\bin\Debug\gsdll32.dll
