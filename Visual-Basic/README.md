@@ -5,6 +5,7 @@ The following libraries / wrappers are used:
 2.	GhostScript.NET	1.2.1
 3.	ZedGraph 5.1.7
 4.	EMGU.CV	3.4.1.2976
+5.  iTextSharp
 
 ## General flow
 - Ask for the filename of the PDF template.
