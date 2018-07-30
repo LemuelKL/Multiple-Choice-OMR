@@ -42,9 +42,9 @@ Namespace PDF2Images
 
         Public Shared Sub PdfToPng(ByVal inputFilePath As String)
             Dim outputDirectory As String = Path.GetDirectoryName(inputFilePath)
-            Dim inputFileName As String = Path.GetFileName(inputFilePath)
-            Dim xDpi = 100
-            Dim yDpi = 100
+            Dim inputFileName As String = Path.GetFileNameWithoutExtension(inputFilePath)
+            Dim xDpi = 300
+            Dim yDpi = 300
             Dim nPages As Integer
             GetPdfNumberOfPages(inputFilePath, nPages)
 
