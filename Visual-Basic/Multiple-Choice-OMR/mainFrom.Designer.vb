@@ -29,14 +29,17 @@ Partial Class MainForm
         Me.imgPath_TextBox = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
+        Me.PrevButton = New System.Windows.Forms.Button()
+        Me.NextButton = New System.Windows.Forms.Button()
+        Me.Label_PageNumber = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(910, 12)
+        Me.Button1.Location = New System.Drawing.Point(468, 12)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(86, 23)
+        Me.Button1.Size = New System.Drawing.Size(86, 38)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Choose PDF"
         Me.Button1.UseVisualStyleBackColor = True
@@ -45,7 +48,7 @@ Partial Class MainForm
         '
         Me.PictureBox1.Location = New System.Drawing.Point(12, 12)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(892, 705)
+        Me.PictureBox1.Size = New System.Drawing.Size(450, 637)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 1
         Me.PictureBox1.TabStop = False
@@ -58,9 +61,10 @@ Partial Class MainForm
         '
         'imgPath_TextBox
         '
-        Me.imgPath_TextBox.Location = New System.Drawing.Point(910, 41)
+        Me.imgPath_TextBox.Location = New System.Drawing.Point(560, 12)
+        Me.imgPath_TextBox.Multiline = True
         Me.imgPath_TextBox.Name = "imgPath_TextBox"
-        Me.imgPath_TextBox.Size = New System.Drawing.Size(85, 20)
+        Me.imgPath_TextBox.Size = New System.Drawing.Size(412, 38)
         Me.imgPath_TextBox.TabIndex = 2
         '
         'OpenFileDialog1
@@ -73,11 +77,40 @@ Partial Class MainForm
         Me.ImageList2.ImageSize = New System.Drawing.Size(16, 16)
         Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
         '
+        'PrevButton
+        '
+        Me.PrevButton.Location = New System.Drawing.Point(513, 226)
+        Me.PrevButton.Name = "PrevButton"
+        Me.PrevButton.Size = New System.Drawing.Size(69, 23)
+        Me.PrevButton.TabIndex = 3
+        Me.PrevButton.Text = "Prev"
+        Me.PrevButton.UseVisualStyleBackColor = True
+        '
+        'NextButton
+        '
+        Me.NextButton.Location = New System.Drawing.Point(588, 226)
+        Me.NextButton.Name = "NextButton"
+        Me.NextButton.Size = New System.Drawing.Size(69, 23)
+        Me.NextButton.TabIndex = 4
+        Me.NextButton.Text = "Next"
+        Me.NextButton.UseVisualStyleBackColor = True
+        '
+        'Label_PageNumber
+        '
+        Me.Label_PageNumber.AutoSize = True
+        Me.Label_PageNumber.Location = New System.Drawing.Point(468, 231)
+        Me.Label_PageNumber.Name = "Label_PageNumber"
+        Me.Label_PageNumber.Size = New System.Drawing.Size(0, 13)
+        Me.Label_PageNumber.TabIndex = 5
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 729)
+        Me.ClientSize = New System.Drawing.Size(984, 661)
+        Me.Controls.Add(Me.Label_PageNumber)
+        Me.Controls.Add(Me.NextButton)
+        Me.Controls.Add(Me.PrevButton)
         Me.Controls.Add(Me.imgPath_TextBox)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button1)
@@ -95,4 +128,7 @@ Partial Class MainForm
     Friend WithEvents imgPath_TextBox As TextBox
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ImageList2 As ImageList
+    Friend WithEvents PrevButton As Button
+    Friend WithEvents NextButton As Button
+    Friend WithEvents Label_PageNumber As Label
 End Class
