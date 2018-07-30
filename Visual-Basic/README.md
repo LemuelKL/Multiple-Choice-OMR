@@ -1,5 +1,5 @@
 ## Dependencies
-This program is developed in under Visual Studio Community 2017 32bit on Windows 10.  
+This program is developed in Visual Studio Community 2017 32bit on Windows 10.  
 The following libraries / wrappers are used:
 1.	GhostScript	9.23
 2.	GhostScript.NET	1.2.1
