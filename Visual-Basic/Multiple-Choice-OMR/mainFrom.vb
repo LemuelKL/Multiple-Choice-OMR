@@ -24,16 +24,19 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
-        imgPath_TextBox.Text = OpenFileDialog1.FileName
-        Dim retFilePaths As New List(Of String)()
-        PDF2Images.Program.PdfToPng(imgPath_TextBox.Text, retFilePaths)
-        ImagesPaths = retFilePaths
-        PictureBox1.ImageLocation = ImagesPaths(0)
-        Label_PageNumber.Text = "1"
+        Dim result As DialogResult = OpenFileDialog1.ShowDialog()
+        If result = Windows.Forms.DialogResult.OK Then
+            Dim retFilePaths As New List(Of String)()
+            PDF2Images.Program.PdfToPng(OpenFileDialog1.FileName, retFilePaths)
+            ImagesPaths = retFilePaths
+            PictureBox1.ImageLocation = ImagesPaths(0)
+            Label_PageNumber.Text = "1"
+        Else
+            MessageBox.Show("No File Selected.")
+        End If
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles imgPath_TextBox.TextChanged
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs)
 
     End Sub
 
@@ -79,3 +82,4 @@ Namespace PDF2Images
         End Sub
     End Class
 End Namespace
+

@@ -26,7 +26,6 @@ Partial Class MainForm
         Me.Button1 = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.imgPath_TextBox = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.PrevButton = New System.Windows.Forms.Button()
@@ -37,9 +36,9 @@ Partial Class MainForm
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(468, 12)
+        Me.Button1.Location = New System.Drawing.Point(471, 12)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(86, 38)
+        Me.Button1.Size = New System.Drawing.Size(116, 38)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Choose PDF"
         Me.Button1.UseVisualStyleBackColor = True
@@ -59,14 +58,6 @@ Partial Class MainForm
         Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         '
-        'imgPath_TextBox
-        '
-        Me.imgPath_TextBox.Location = New System.Drawing.Point(560, 12)
-        Me.imgPath_TextBox.Multiline = True
-        Me.imgPath_TextBox.Name = "imgPath_TextBox"
-        Me.imgPath_TextBox.Size = New System.Drawing.Size(412, 38)
-        Me.imgPath_TextBox.TabIndex = 2
-        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
@@ -79,18 +70,18 @@ Partial Class MainForm
         '
         'PrevButton
         '
-        Me.PrevButton.Location = New System.Drawing.Point(513, 226)
+        Me.PrevButton.Location = New System.Drawing.Point(471, 56)
         Me.PrevButton.Name = "PrevButton"
-        Me.PrevButton.Size = New System.Drawing.Size(69, 23)
+        Me.PrevButton.Size = New System.Drawing.Size(55, 49)
         Me.PrevButton.TabIndex = 3
         Me.PrevButton.Text = "Prev"
         Me.PrevButton.UseVisualStyleBackColor = True
         '
         'NextButton
         '
-        Me.NextButton.Location = New System.Drawing.Point(588, 226)
+        Me.NextButton.Location = New System.Drawing.Point(532, 56)
         Me.NextButton.Name = "NextButton"
-        Me.NextButton.Size = New System.Drawing.Size(69, 23)
+        Me.NextButton.Size = New System.Drawing.Size(55, 49)
         Me.NextButton.TabIndex = 4
         Me.NextButton.Text = "Next"
         Me.NextButton.UseVisualStyleBackColor = True
@@ -111,7 +102,6 @@ Partial Class MainForm
         Me.Controls.Add(Me.Label_PageNumber)
         Me.Controls.Add(Me.NextButton)
         Me.Controls.Add(Me.PrevButton)
-        Me.Controls.Add(Me.imgPath_TextBox)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button1)
         Me.Name = "MainForm"
@@ -125,7 +115,6 @@ Partial Class MainForm
     Friend WithEvents Button1 As Button
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ImageList1 As ImageList
-    Friend WithEvents imgPath_TextBox As TextBox
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ImageList2 As ImageList
     Friend WithEvents PrevButton As Button
