@@ -23,7 +23,7 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button_ChoosePDF = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -31,17 +31,19 @@ Partial Class MainForm
         Me.PrevButton = New System.Windows.Forms.Button()
         Me.NextButton = New System.Windows.Forms.Button()
         Me.Label_PageNumber = New System.Windows.Forms.Label()
+        Me.TextBox_FilePath = New System.Windows.Forms.TextBox()
+        Me.Button_PreProcess = New System.Windows.Forms.Button()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Button1
+        'Button_ChoosePDF
         '
-        Me.Button1.Location = New System.Drawing.Point(471, 12)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(116, 38)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Choose PDF"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button_ChoosePDF.Location = New System.Drawing.Point(471, 12)
+        Me.Button_ChoosePDF.Name = "Button_ChoosePDF"
+        Me.Button_ChoosePDF.Size = New System.Drawing.Size(116, 38)
+        Me.Button_ChoosePDF.TabIndex = 0
+        Me.Button_ChoosePDF.Text = "Choose PDF"
+        Me.Button_ChoosePDF.UseVisualStyleBackColor = True
         '
         'PictureBox1
         '
@@ -89,21 +91,42 @@ Partial Class MainForm
         'Label_PageNumber
         '
         Me.Label_PageNumber.AutoSize = True
-        Me.Label_PageNumber.Location = New System.Drawing.Point(468, 231)
+        Me.Label_PageNumber.Location = New System.Drawing.Point(593, 74)
         Me.Label_PageNumber.Name = "Label_PageNumber"
-        Me.Label_PageNumber.Size = New System.Drawing.Size(0, 13)
+        Me.Label_PageNumber.Size = New System.Drawing.Size(27, 13)
         Me.Label_PageNumber.TabIndex = 5
+        Me.Label_PageNumber.Text = "N/A"
+        '
+        'TextBox_FilePath
+        '
+        Me.TextBox_FilePath.Location = New System.Drawing.Point(471, 111)
+        Me.TextBox_FilePath.Multiline = True
+        Me.TextBox_FilePath.Name = "TextBox_FilePath"
+        Me.TextBox_FilePath.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox_FilePath.Size = New System.Drawing.Size(501, 162)
+        Me.TextBox_FilePath.TabIndex = 6
+        '
+        'Button_PreProcess
+        '
+        Me.Button_PreProcess.Location = New System.Drawing.Point(471, 279)
+        Me.Button_PreProcess.Name = "Button_PreProcess"
+        Me.Button_PreProcess.Size = New System.Drawing.Size(116, 52)
+        Me.Button_PreProcess.TabIndex = 7
+        Me.Button_PreProcess.Text = "Start Pre-Processing"
+        Me.Button_PreProcess.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(984, 661)
+        Me.Controls.Add(Me.Button_PreProcess)
+        Me.Controls.Add(Me.TextBox_FilePath)
         Me.Controls.Add(Me.Label_PageNumber)
         Me.Controls.Add(Me.NextButton)
         Me.Controls.Add(Me.PrevButton)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Button_ChoosePDF)
         Me.Name = "MainForm"
         Me.Text = "Multiple-Choice-OMR"
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -112,7 +135,7 @@ Partial Class MainForm
 
     End Sub
 
-    Friend WithEvents Button1 As Button
+    Friend WithEvents Button_ChoosePDF As Button
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
@@ -120,4 +143,6 @@ Partial Class MainForm
     Friend WithEvents PrevButton As Button
     Friend WithEvents NextButton As Button
     Friend WithEvents Label_PageNumber As Label
+    Friend WithEvents TextBox_FilePath As TextBox
+    Friend WithEvents Button_PreProcess As Button
 End Class

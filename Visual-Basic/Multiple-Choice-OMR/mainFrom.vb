@@ -13,7 +13,10 @@ Imports iTextSharp
 Imports iTextSharp.text.pdf
 
 Public Class MainForm
+    Shared nImages As Integer = 0
     Shared ImageCounter As Integer = 0
+    Shared ImagesRead As New List(Of Image)()
+    Shared ImagesReadCV As New List(Of Mat)()
     Dim ImagesPaths As New List(Of String)()
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -23,12 +26,23 @@ Public Class MainForm
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button_ChoosePDF_Click(sender As Object, e As EventArgs) Handles Button_ChoosePDF.Click
         Dim result As DialogResult = OpenFileDialog1.ShowDialog()
         If result = Windows.Forms.DialogResult.OK Then
-            Dim retFilePaths As New List(Of String)()
-            PDF2Images.Program.PdfToPng(OpenFileDialog1.FileName, retFilePaths)
-            ImagesPaths = retFilePaths
+            Dim ret As New List(Of String)()
+            PDF2Images.Program.PdfToPng(OpenFileDialog1.FileName, ret)
+            ImagesPaths = ret
+
+            For Each path As String In ImagesPaths
+                TextBox_FilePath.AppendText(path & Environment.NewLine)
+            Next
+            nImages = ImagesPaths.Count()
+
+            ImagesRead.Clear()
+            For index As Integer = 0 To nImages - 1
+                ImagesRead.Add(Image.FromFile(ImagesPaths(index)))
+            Next
+
             PictureBox1.ImageLocation = ImagesPaths(0)
             Label_PageNumber.Text = "1"
         Else
@@ -36,16 +50,12 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs)
-
-    End Sub
-
     Private Sub PrevButton_Click(sender As Object, e As EventArgs) Handles PrevButton.Click
         If ImageCounter < 1 Then
         Else
             ImageCounter = ImageCounter - 1
         End If
-        PictureBox1.ImageLocation = ImagesPaths(ImageCounter)
+        PictureBox1.Image = ImagesRead(ImageCounter)
         Label_PageNumber.Text = CStr(ImageCounter + 1)
     End Sub
 
@@ -54,8 +64,33 @@ Public Class MainForm
         Else
             ImageCounter = ImageCounter + 1
         End If
-        PictureBox1.ImageLocation = ImagesPaths(ImageCounter)
+        PictureBox1.Image = ImagesRead(ImageCounter)
         Label_PageNumber.Text = CStr(ImageCounter + 1)
+    End Sub
+
+    Shared ImageDonePreProcess As New List(Of Mat)()
+
+    Private Sub PreProcessImage()
+        If ImagesPaths.Count < 1 Then
+            Return
+        End If
+        If ImagesReadCV.Count >= ImagesPaths.Count Then
+            MessageBox.Show("Action Ignored!")
+            Return
+        End If
+        For index As Integer = 0 To nImages - 1
+            ImagesReadCV.Add(CvInvoke.Imread(ImagesPaths(index), 0))
+            If ImagesReadCV(index).IsEmpty = True Then
+                MessageBox.Show("One or more files does not exist!")
+                Return
+            End If
+        Next
+    End Sub
+
+    Private Sub Button_PreProcess_Click(sender As Object, e As EventArgs) Handles Button_PreProcess.Click
+        PreProcessImage()
+        'PictureBox1.Image = ImageDonePreProcess(1).ToBitmap
+
     End Sub
 End Class
 
