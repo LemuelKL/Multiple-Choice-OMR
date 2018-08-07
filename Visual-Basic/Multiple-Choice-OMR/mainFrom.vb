@@ -37,7 +37,7 @@ Public Class MainForm
 
             ImagesReadCV.Clear()
             For index As Integer = 0 To nImages - 1
-                ImagesReadCV.Add(CvInvoke.Imread(ImagesPaths(index), 0))
+                ImagesReadCV.Add(CvInvoke.Imread(ImagesPaths(index), -1))
                 If ImagesReadCV(index).IsEmpty = True Then
                     MessageBox.Show("One or more files does not exist!")
                     Return
@@ -75,20 +75,19 @@ Public Class MainForm
 
     Private Sub PreProcessImage()
         If ImagesPaths.Count < 1 Then
+            Throw New Exception("No Image To Process!")
             Return
         End If
-        If ImagesReadCV.Count >= ImagesPaths.Count Then
-            MessageBox.Show("Action Ignored!")
-            Return
-        End If
-
-
+        For index As Integer = 0 To nImages - 1
+            Dim TempImage As Image(Of Bgr, Byte) = ImagesReadCV(index).ToImage(Of Bgr, Byte)()
+            Dim GrayImage As Image(Of Gray, Byte) = TempImage.Convert(Of Gray, Byte)()
+            ImagesReadCV(index) = GrayImage.Mat
+        Next
     End Sub
 
     Private Sub Button_PreProcess_Click(sender As Object, e As EventArgs) Handles Button_PreProcess.Click
         PreProcessImage()
-        'PictureBox1.Image = ImageDonePreProcess(1).ToBitmap
-
+        ImageBox_Main.Image = ImagesReadCV(ImageCounter)
     End Sub
 End Class
 
