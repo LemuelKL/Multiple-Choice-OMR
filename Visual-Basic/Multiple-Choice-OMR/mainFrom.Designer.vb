@@ -24,7 +24,6 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.Button_ChoosePDF = New System.Windows.Forms.Button()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
@@ -33,7 +32,8 @@ Partial Class MainForm
         Me.Label_PageNumber = New System.Windows.Forms.Label()
         Me.TextBox_FilePath = New System.Windows.Forms.TextBox()
         Me.Button_PreProcess = New System.Windows.Forms.Button()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ImageBox_Main = New Emgu.CV.UI.ImageBox()
+        CType(Me.ImageBox_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button_ChoosePDF
@@ -44,15 +44,6 @@ Partial Class MainForm
         Me.Button_ChoosePDF.TabIndex = 0
         Me.Button_ChoosePDF.Text = "Choose PDF"
         Me.Button_ChoosePDF.UseVisualStyleBackColor = True
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 12)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(450, 637)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 1
-        Me.PictureBox1.TabStop = False
         '
         'ImageList1
         '
@@ -115,28 +106,36 @@ Partial Class MainForm
         Me.Button_PreProcess.Text = "Start Pre-Processing"
         Me.Button_PreProcess.UseVisualStyleBackColor = True
         '
+        'ImageBox_Main
+        '
+        Me.ImageBox_Main.Location = New System.Drawing.Point(12, 12)
+        Me.ImageBox_Main.Name = "ImageBox_Main"
+        Me.ImageBox_Main.Size = New System.Drawing.Size(453, 637)
+        Me.ImageBox_Main.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.ImageBox_Main.TabIndex = 2
+        Me.ImageBox_Main.TabStop = False
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(984, 661)
+        Me.Controls.Add(Me.ImageBox_Main)
         Me.Controls.Add(Me.Button_PreProcess)
         Me.Controls.Add(Me.TextBox_FilePath)
         Me.Controls.Add(Me.Label_PageNumber)
         Me.Controls.Add(Me.NextButton)
         Me.Controls.Add(Me.PrevButton)
-        Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button_ChoosePDF)
         Me.Name = "MainForm"
         Me.Text = "Multiple-Choice-OMR"
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ImageBox_Main, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents Button_ChoosePDF As Button
-    Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ImageList2 As ImageList
@@ -145,4 +144,5 @@ Partial Class MainForm
     Friend WithEvents Label_PageNumber As Label
     Friend WithEvents TextBox_FilePath As TextBox
     Friend WithEvents Button_PreProcess As Button
+    Friend WithEvents ImageBox_Main As Emgu.CV.UI.ImageBox
 End Class
