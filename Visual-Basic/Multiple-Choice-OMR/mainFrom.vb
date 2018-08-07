@@ -24,6 +24,7 @@ Public Class MainForm
     Private Sub Button_ChoosePDF_Click(sender As Object, e As EventArgs) Handles Button_ChoosePDF.Click
         TextBox_FilePath.Text = ""
         ImagesPaths.Clear()
+        ImagesReadCV.Clear()
         nImages = 0
         ImageCounter = 0
         Dim result As DialogResult = OpenFileDialog1.ShowDialog()
@@ -75,7 +76,7 @@ Public Class MainForm
 
     Private Sub PreProcessImage()
         If ImagesPaths.Count < 1 Then
-            Throw New Exception("No Image To Process!")
+            MessageBox.Show("No Image To Process!")
             Return
         End If
         For index As Integer = 0 To nImages - 1
