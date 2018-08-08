@@ -50,7 +50,7 @@ def processImage(image):
 def findCircleContours(image):
     processed_image = processImage(image)
     # cv2.fincContours return 3 values, 1st one not needed, "contours" contains all contours in the given image, 
-    # "hierarchy", refer to first glance https://docs.opencv.org/3.4.0/d9/d8b/tutorial_py_contours_hierarchy.html
+    # "hierarchy", refer https://docs.opencv.org/3.4.0/d9/d8b/tutorial_py_contours_hierarchy.html
     # for understanding, basically it describe a "level" relationship between contours and contours.
     # Opencv hierarchy structure: [Next, Previous, First_Child, Parent]
     _, contours, hierarchy = cv2.findContours(processed_image.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
