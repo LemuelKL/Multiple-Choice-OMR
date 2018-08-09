@@ -45,6 +45,7 @@ def processImage(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurry = cv2.GaussianBlur(gray, (3, 3), 1)
     adapt_thresh = cv2.adaptiveThreshold(blurry, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+    input(len(adapt_thresh.shape))
     return adapt_thresh
 
 def findCircleContours(image):
@@ -54,7 +55,7 @@ def findCircleContours(image):
     # for understanding, basically it describe a "level" relationship between contours and contours.
     # Opencv hierarchy structure: [Next, Previous, First_Child, Parent]
     _, contours, hierarchy = cv2.findContours(processed_image.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(image, contours,  -1, (0,255,0), 1)
+    cv2.drawContours(image, contours, -1, (0,255,0), 1)
     cv2.imshow("Contours", image)
     cv2.waitKey(0)
     
