@@ -33,6 +33,7 @@ Partial Class MainForm
         Me.TextBox_FilePath = New System.Windows.Forms.TextBox()
         Me.Button_PreProcess = New System.Windows.Forms.Button()
         Me.ImageBox_Main = New Emgu.CV.UI.ImageBox()
+        Me.Button_ContourDetection = New System.Windows.Forms.Button()
         CType(Me.ImageBox_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -115,11 +116,21 @@ Partial Class MainForm
         Me.ImageBox_Main.TabIndex = 2
         Me.ImageBox_Main.TabStop = False
         '
+        'Button_ContourDetection
+        '
+        Me.Button_ContourDetection.Location = New System.Drawing.Point(471, 337)
+        Me.Button_ContourDetection.Name = "Button_ContourDetection"
+        Me.Button_ContourDetection.Size = New System.Drawing.Size(116, 52)
+        Me.Button_ContourDetection.TabIndex = 8
+        Me.Button_ContourDetection.Text = "Start Contour Detection"
+        Me.Button_ContourDetection.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(984, 661)
+        Me.Controls.Add(Me.Button_ContourDetection)
         Me.Controls.Add(Me.ImageBox_Main)
         Me.Controls.Add(Me.Button_PreProcess)
         Me.Controls.Add(Me.TextBox_FilePath)
@@ -145,4 +156,5 @@ Partial Class MainForm
     Friend WithEvents TextBox_FilePath As TextBox
     Friend WithEvents Button_PreProcess As Button
     Friend WithEvents ImageBox_Main As Emgu.CV.UI.ImageBox
+    Friend WithEvents Button_ContourDetection As Button
 End Class

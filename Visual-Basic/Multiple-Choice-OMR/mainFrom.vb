@@ -38,14 +38,14 @@ Public Class MainForm
 
             ImagesReadCV.Clear()
             For index As Integer = 0 To nImages - 1
-                ImagesReadCV.Add(CvInvoke.Imread(ImagesPaths(index), -1))
+                ImagesReadCV.Add(CvInvoke.Imread(ImagesPaths(index), 1))
                 If ImagesReadCV(index).IsEmpty = True Then
                     MessageBox.Show("One or more files does not exist!")
                     Return
                 End If
             Next
 
-            ImageBox_Main.Image = ImagesReadCV(4)
+            ImageBox_Main.Image = ImagesReadCV(0)
             Label_PageNumber.Text = "1"
         Else
             MessageBox.Show("No File Selected.")
@@ -80,9 +80,20 @@ Public Class MainForm
             Return
         End If
         For index As Integer = 0 To nImages - 1
-            Dim TempImage As Image(Of Bgr, Byte) = ImagesReadCV(index).ToImage(Of Bgr, Byte)()
-            Dim GrayImage As Image(Of Gray, Byte) = TempImage.Convert(Of Gray, Byte)()
-            ImagesReadCV(index) = GrayImage.Mat
+            Dim GrayImage As Mat = ImagesReadCV(index).Clone()
+            Dim BlurredImage As Mat = GrayImage.Clone()
+            Dim AdaptThresh As Mat = BlurredImage.Clone()
+
+            If GrayImage.NumberOfChannels <> 3 Then
+                MessageBox.Show("Invalid Number of Channels within the Image!\nExpect 3 but got" & GrayImage.NumberOfChannels)
+                Return
+            End If
+            CvInvoke.CvtColor(ImagesReadCV(index), GrayImage, ColorConversion.Bgr2Gray)
+            CvInvoke.GaussianBlur(GrayImage, BlurredImage, New Drawing.Size(3, 3), 1)
+            CvInvoke.AdaptiveThreshold(BlurredImage, AdaptThresh, 255, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 11, 2)
+            ImagesReadCV(index) = AdaptThresh
+            MessageBox.Show("Done!")
+            ReloadImageBox()
         Next
     End Sub
 
@@ -90,6 +101,35 @@ Public Class MainForm
         PreProcessImage()
         ImageBox_Main.Image = ImagesReadCV(ImageCounter)
     End Sub
+
+    Dim Contours As New List(Of Emgu.CV.Util.VectorOfVectorOfPoint)
+    Dim Hierarchy As New List(Of Mat)
+    Private Sub FindCricleContours()
+        For index As Integer = 0 To nImages - 1
+            Dim tContour As New Emgu.CV.Util.VectorOfVectorOfPoint()
+            Dim tHierarchy As New Mat()
+
+            CvInvoke.FindContours(ImagesReadCV(index).Clone, tContour, tHierarchy, 2, ChainApproxMethod.ChainApproxNone)
+            Contours.Add(tContour)
+            Hierarchy.Add(tHierarchy)
+            If tContour Is Nothing Then
+                MessageBox.Show("!!")
+            End If
+            CvInvoke.CvtColor(ImagesReadCV(index), ImagesReadCV(index), ColorConversion.Gray2Bgr, 3)
+            CvInvoke.DrawContours(ImagesReadCV(index), tContour, -1, New MCvScalar(0, 255, 0, 255), 1)
+        Next
+        MessageBox.Show("Done!")
+        ReloadImageBox()
+    End Sub
+
+    Private Sub Button_ContourDetection_Click(sender As Object, e As EventArgs) Handles Button_ContourDetection.Click
+        FindCricleContours()
+    End Sub
+
+    Private Sub ReloadImageBox()
+        ImageBox_Main.Image = ImagesReadCV(ImageCounter)
+    End Sub
+
 End Class
 
 Namespace PDF2Images
