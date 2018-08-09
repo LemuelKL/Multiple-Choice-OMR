@@ -109,6 +109,7 @@ Partial Class MainForm
         '
         'ImageBox_Main
         '
+        Me.ImageBox_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ImageBox_Main.Location = New System.Drawing.Point(12, 12)
         Me.ImageBox_Main.Name = "ImageBox_Main"
         Me.ImageBox_Main.Size = New System.Drawing.Size(453, 637)

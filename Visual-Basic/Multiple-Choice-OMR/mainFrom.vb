@@ -92,9 +92,9 @@ Public Class MainForm
             CvInvoke.GaussianBlur(GrayImage, BlurredImage, New Drawing.Size(3, 3), 1)
             CvInvoke.AdaptiveThreshold(BlurredImage, AdaptThresh, 255, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 11, 2)
             ImagesReadCV(index) = AdaptThresh
-            MessageBox.Show("Done!")
-            ReloadImageBox()
         Next
+        MessageBox.Show("Done!")
+        ReloadImageBox()
     End Sub
 
     Private Sub Button_PreProcess_Click(sender As Object, e As EventArgs) Handles Button_PreProcess.Click
@@ -102,21 +102,32 @@ Public Class MainForm
         ImageBox_Main.Image = ImagesReadCV(ImageCounter)
     End Sub
 
-    Dim Contours As New List(Of Emgu.CV.Util.VectorOfVectorOfPoint)
-    Dim Hierarchy As New List(Of Mat)
+    Dim ContoursInAllImages As New List(Of Emgu.CV.Util.VectorOfVectorOfPoint)
+    Dim HierarchyInAllImages As New List(Of Mat)
+
     Private Sub FindCricleContours()
         For index As Integer = 0 To nImages - 1
-            Dim tContour As New Emgu.CV.Util.VectorOfVectorOfPoint()
-            Dim tHierarchy As New Mat()
+            Dim ContourInThisImage As Emgu.CV.Util.VectorOfVectorOfPoint = New Emgu.CV.Util.VectorOfVectorOfPoint()
+            Dim HierarchyInThisImage As New Mat()
 
-            CvInvoke.FindContours(ImagesReadCV(index).Clone, tContour, tHierarchy, 2, ChainApproxMethod.ChainApproxNone)
-            Contours.Add(tContour)
-            Hierarchy.Add(tHierarchy)
-            If tContour Is Nothing Then
+            CvInvoke.FindContours(ImagesReadCV(index).Clone, ContourInThisImage, HierarchyInThisImage, 2, ChainApproxMethod.ChainApproxNone)
+            ContoursInAllImages.Add(ContourInThisImage)
+            HierarchyInAllImages.Add(HierarchyInThisImage)
+            If ContourInThisImage Is Nothing Then
                 MessageBox.Show("!!")
             End If
             CvInvoke.CvtColor(ImagesReadCV(index), ImagesReadCV(index), ColorConversion.Gray2Bgr, 3)
-            CvInvoke.DrawContours(ImagesReadCV(index), tContour, -1, New MCvScalar(0, 255, 0, 255), 1)
+            CvInvoke.DrawContours(ImagesReadCV(index), ContourInThisImage, -1, New MCvScalar(0, 255, 0, 255), 1)
+
+            For index2 As Integer = 0 To ContourInThisImage.Size - 1
+
+                Console.WriteLine("contours.Size: " + ContourInThisImage.Size.ToString)
+                Console.WriteLine("hierarchy.Rows: " + HierarchyInThisImage.Rows.ToString)
+                Console.WriteLine("hierarchy.Cols: " + HierarchyInThisImage.Cols.ToString)
+                Console.WriteLine("hierarchy.Depth: " + HierarchyInThisImage.Depth.ToString)
+                Console.WriteLine("hierarchy.NumberOfChannels: " + HierarchyInThisImage.NumberOfChannels.ToString)
+
+            Next
         Next
         MessageBox.Show("Done!")
         ReloadImageBox()
