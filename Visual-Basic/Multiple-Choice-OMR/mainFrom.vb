@@ -11,6 +11,7 @@ Imports Emgu.CV.Structure
 Imports Emgu.CV.CvEnum
 Imports iTextSharp
 Imports iTextSharp.text.pdf
+'Imports OpenCV.Net
 
 Public Class MainForm
     Shared nImages As Integer = 0
@@ -119,15 +120,10 @@ Public Class MainForm
             CvInvoke.CvtColor(ImagesReadCV(index), ImagesReadCV(index), ColorConversion.Gray2Bgr, 3)
             CvInvoke.DrawContours(ImagesReadCV(index), ContourInThisImage, -1, New MCvScalar(0, 255, 0, 255), 1)
 
-            For index2 As Integer = 0 To ContourInThisImage.Size - 1
+            Dim ret() As Integer = New Integer(-1) {}
+            ret = GetHierarchy(HierarchyInThisImage, 0)
+            Console.WriteLine(ret)
 
-                Console.WriteLine("contours.Size: " + ContourInThisImage.Size.ToString)
-                Console.WriteLine("hierarchy.Rows: " + HierarchyInThisImage.Rows.ToString)
-                Console.WriteLine("hierarchy.Cols: " + HierarchyInThisImage.Cols.ToString)
-                Console.WriteLine("hierarchy.Depth: " + HierarchyInThisImage.Depth.ToString)
-                Console.WriteLine("hierarchy.NumberOfChannels: " + HierarchyInThisImage.NumberOfChannels.ToString)
-
-            Next
         Next
         MessageBox.Show("Done!")
         ReloadImageBox()
@@ -140,6 +136,52 @@ Public Class MainForm
     Private Sub ReloadImageBox()
         ImageBox_Main.Image = ImagesReadCV(ImageCounter)
     End Sub
+
+    Public Function GetHierarchy(ByVal Hierarchy As Mat, ByVal contourIdx As Integer) As Integer()
+        Dim ret() As Integer = New Integer(-1) {}
+        If (Hierarchy.Depth <> Emgu.CV.CvEnum.DepthType.Cv32S) Then
+            Throw New ArgumentOutOfRangeException("ContourData must have Cv32S hierarchy element type.")
+        End If
+
+        If (Hierarchy.Rows <> 1) Then
+            Throw New ArgumentOutOfRangeException("ContourData must have one hierarchy hierarchy row.")
+        End If
+
+        If (Hierarchy.NumberOfChannels <> 4) Then
+            Throw New ArgumentOutOfRangeException("ContourData must have four hierarchy channels.")
+        End If
+
+        If (Hierarchy.Dims <> 2) Then
+            Throw New ArgumentOutOfRangeException("ContourData must have two dimensional hierarchy.")
+        End If
+
+        Dim elementStride As Long
+        Dim offset0 = (CType(0, Long) _
+                    + (contourIdx * elementStride))
+        If ((0 <= offset0) _
+                    AndAlso (offset0 _
+                    < (Hierarchy.Total.ToInt64 * elementStride))) Then
+            Dim offset1 = (CType(1, Long) _
+                        + (contourIdx * elementStride))
+            Dim offset2 = (CType(2, Long) _
+                        + (contourIdx * elementStride))
+            Dim offset3 = (CType(3, Long) _
+                        + (contourIdx * elementStride))
+            ret = New Integer((4) - 1) {}
+            'return *((Int32*)Hierarchy.DataPointer.ToPointer() + offset);
+            ret(0) = (CType(Hierarchy.DataPointer, Int32) + offset0)
+            ret(1) = (CType(Hierarchy.DataPointer, Int32) + offset1)
+            ret(2) = (CType(Hierarchy.DataPointer, Int32) + offset2)
+            ret(3) = (CType(Hierarchy.DataPointer, Int32) + offset3)
+            CType
+        End If
+
+        'else
+        '{
+        '    return new int[] { };
+        '}
+        Return ret
+    End Function
 
 End Class
 
@@ -166,4 +208,3 @@ Namespace PDF2Images
         End Sub
     End Class
 End Namespace
-
