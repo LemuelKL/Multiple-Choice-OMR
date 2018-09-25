@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+
+int nCircles=0;
 const int minCircleW = 16;
 const int minCircleH = 16;
 const int minCircleArea = ((minCircleW+minCircleH)/4)*((minCircleW+minCircleH)/4)*3.1;
@@ -24,10 +26,34 @@ Mat processImg(cv::Mat img){
     return adaptThreshImg;
 }
 
- vector<vector<Point> > findCircleContours(Mat img){
-    cout << "HI";
-    vector<vector<Point> > circleContours;
+float calModeRadius(vector<float> v)
+{
+    sort(v.begin(), v.end());
+    float prev = v.back();
+    float mode;
+    int maxcount = 0;
+    int currcount = 0;
+    unsigned int i;
+    for (i=0;i<v.size();i++) {
+        float n = v[i];
+        if (n == prev) {
+            ++currcount;
+            if (currcount > maxcount) {
+                maxcount = currcount;
+                mode = n;
+            }
+        } else {
+            currcount = 1;
+        }
+        prev = n;
+    }
+    return mode;
+}
 
+ vector<vector<Point> > findCircleContours(Mat img){
+    vector<float> radii;
+    float modeRadius;
+    vector<vector<Point> > circleContours;
     Mat proccessedImg = processImg(img);
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
@@ -43,15 +69,36 @@ Mat processImg(cv::Mat img){
             vector<Point> approxCurve;
             cv::approxPolyDP(contours[c], approxCurve, epsilon, TRUE);
             double area = cv::contourArea(contours[c]);
-            cout << approxCurve.size() << endl;
             if ( approxCurve.size() > 8 && approxCurve.size() < 20 && area > minCircleArea ){
-                circleContours.push_back(contours[c]);
+                Point2f center;
+                float radius;
+                minEnclosingCircle(contours[c], center, radius);
+                if ( arcLength(contours[c], TRUE) > 2.9*2*radius && arcLength(contours[c], TRUE) < 3.3*2*radius ){
+                    circleContours.push_back(contours[c]);
+                    radii.push_back(radius);
+                    nCircles++;
+                }
             }
         }
     }
-    cv::drawContours(img, circleContours, -1, Scalar(0,255,0), 1, LINE_8);
+
+    modeRadius = calModeRadius(radii);
+    int i=0;
+    for(auto const& radius: radii){
+        if (abs(radius-modeRadius) > 1){
+            circleContours.erase(circleContours.begin()+i);
+            i--;
+        }
+        i++;
+    }
+
+    cout << "Mode of radii: " << modeRadius << endl;
+    cout << "Number of circles: " << nCircles << endl;
+    cvtColor(img,img,COLOR_GRAY2BGR);
+    cv::drawContours(img, circleContours, -1, Scalar(0,255,0), 2);
     Mat imgS;
-    cv::resize(img, imgS, cv::Size(500,707));
+    Size s = img.size();
+    cv::resize(img, imgS, cv::Size(s.width/3, s.height/3));
     cv::imshow("Contours", imgS);
     cv::waitKey(0);
     cv::destroyAllWindows();
@@ -64,15 +111,13 @@ int singleImgLogic(cv::Mat img){
     return 0;
 }
 
-void get_all_files_names_within_folder(string folder, vector<string> &names)
+void get_all_files_names_within_folder(string folder, vector<string> &names, string fExt)
 {
-    string search_path = folder + "/*.*";
+    string search_path = folder + "/*." + fExt;
     WIN32_FIND_DATA fd;
     HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
     if(hFind != INVALID_HANDLE_VALUE) {
         do {
-            // read all (real) files in current folder
-            // , delete '!' read other 2 default folder . and ..
             if(! (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
                 names.push_back(folder+"\\"+fd.cFileName);
             }
@@ -84,10 +129,10 @@ bool dirExists(const std::string& dirName_in)
 {
     DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
     if (ftyp == INVALID_FILE_ATTRIBUTES)
-        return false;  //something is wrong with your path!
+        return false;
     if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-        return true;   // this is a directory!
-    return false;    // this is not a directory!
+        return true;
+    return false;
 }
 
 vector<string> getFullPathNameOfImgToProcess()
@@ -104,7 +149,7 @@ vector<string> getFullPathNameOfImgToProcess()
     }
 
     vector<string> fNames;
-    get_all_files_names_within_folder(workingDir + imgPrefix, fNames);
+    get_all_files_names_within_folder(workingDir + imgPrefix, fNames, "png");
 
     if(fNames.size()<=0)
         return vector<string>();
