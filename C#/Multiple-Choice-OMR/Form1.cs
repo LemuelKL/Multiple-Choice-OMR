@@ -92,27 +92,7 @@ namespace Multiple_Choice_OMR
         }
 
         private List<Emgu.CV.Util.VectorOfVectorOfPoint> ContoursInAllImages = new List<Emgu.CV.Util.VectorOfVectorOfPoint>();
-        private List<Mat> HierarchyInAllImages = new List<Mat>();
-
-        private void FindCricleContours()
-        {
-            for (int index = 0; index <= nImages - 1; index++)
-            {
-                Emgu.CV.Util.VectorOfVectorOfPoint ContourInThisImage = new Emgu.CV.Util.VectorOfVectorOfPoint();
-                Mat HierarchyInThisImage = new Mat();
-
-                CvInvoke.FindContours(ImagesReadCV[index], ContourInThisImage, HierarchyInThisImage, Emgu.CV.CvEnum.RetrType.Ccomp, ChainApproxMethod.ChainApproxNone);
-                ContoursInAllImages.Add(ContourInThisImage);
-                HierarchyInAllImages.Add(HierarchyInThisImage);
-                if (ContourInThisImage == null)
-                    MessageBox.Show("!!");
-                CvInvoke.CvtColor(ImagesReadCV[index], ImagesReadCV[index], ColorConversion.Gray2Bgr, 3);
-                CvInvoke.DrawContours(ImagesReadCV[index], ContourInThisImage, -1, new MCvScalar(0, 255, 0, 255), 1);
-
-            }
-            MessageBox.Show("Done!");
-            ReloadImageBox();
-        }
+        private List<Mat> HierarchyInAllImages = new List<Mat>(); 
 
         private void Button_ContourDetection_Click(object sender, EventArgs e)
         {
@@ -157,6 +137,27 @@ namespace Multiple_Choice_OMR
             else
                 MessageBox.Show("No File Selected.");
         }
+
+        private void FindCricleContours()
+        {
+            for (int index = 0; index <= nImages - 1; index++)
+            {
+                Emgu.CV.Util.VectorOfVectorOfPoint ContourInThisImage = new Emgu.CV.Util.VectorOfVectorOfPoint();
+                Mat HierarchyInThisImage = new Mat();
+
+                CvInvoke.FindContours(ImagesReadCV[index], ContourInThisImage, HierarchyInThisImage, Emgu.CV.CvEnum.RetrType.Ccomp, ChainApproxMethod.ChainApproxNone);
+                ContoursInAllImages.Add(ContourInThisImage);
+                HierarchyInAllImages.Add(HierarchyInThisImage);
+                if (ContourInThisImage == null)
+                    MessageBox.Show("!!");
+                CvInvoke.CvtColor(ImagesReadCV[index], ImagesReadCV[index], ColorConversion.Gray2Bgr, 3);
+                CvInvoke.DrawContours(ImagesReadCV[index], ContourInThisImage, -1, new MCvScalar(0, 255, 0, 255), 1);
+                
+            }
+            MessageBox.Show("Done!");
+            ReloadImageBox();
+        }
+
     }
 
     namespace PDF2Images
