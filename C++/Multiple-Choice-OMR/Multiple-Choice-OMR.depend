@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1537894188 source:d:\users\lemuel\documents\github\multiple-choice-omr\c++\multiple-choice-omr\main.cpp
+1538052802 source:d:\users\lemuel\documents\github\multiple-choice-omr\c++\multiple-choice-omr\main.cpp
 	<opencv2/core/core.hpp>
 	<opencv2/imgproc/imgproc.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -10,4 +10,9 @@
 	<vector>
 	<sys/types.h>
 	<sys/stat.h>
+
+1538049949 source:d:\users\lemuel\documents\github\multiple-choice-omr\c++\multiple-choice-omr\kmean.cpp
+	<cstdlib>
+	<math.h>
+	<vector>
 

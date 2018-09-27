@@ -9,14 +9,66 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+using namespace cv;
+using namespace std;
+
+class choice
+{
+    private:
+        vector<Point> contour;
+
+    public:
+        int id;
+        int questionNo;
+        int centerX;
+        int centerY;
+        float radius;
+        bool isChecked;
+
+    choice()
+    {
+        id = -1;
+        questionNo = -1;
+    }
+    choice(int _id, vector<Point> _contour)
+    {
+        id = _id;
+        questionNo = -1;
+        contour = _contour;
+
+        Rect rect = boundingRect(contour);
+        centerX = rect.x + rect.width / 2;
+        centerY = rect.y + rect.height / 2;
+        radius = sqrt(rect.width*rect.width+rect.height*rect.height) / 2;
+    }
+    void printSelfInfo()
+    {
+        cout << "[" << id << "]" << "\n";
+        cout << "\t" << "questionNo " << questionNo << "\n";
+        cout << "\t" << "centerX " << centerX << "\n";
+        cout << "\t" << "centerY " << centerY << "\n";
+        cout << "\t" << "radius " << radius << "\n";
+        cout << "\t" << "isChecked " << isChecked << "\n";
+        cout << endl;
+    }
+};
 
 int nCircles=0;
 const int minCircleW = 16;
 const int minCircleH = 16;
-const int minCircleArea = ((minCircleW+minCircleH)/4)*((minCircleW+minCircleH)/4)*3.1;
+const float minCircleArea = ((minCircleW+minCircleH)/4)*((minCircleW+minCircleH)/4)*3.1;
 
-using namespace cv;
-using namespace std;
+void displayContourDrawings(Mat img, vector<vector<Point> > contours, signed int contourIdx, Scalar colour, int thickness)
+{
+    cvtColor(img, img, COLOR_GRAY2BGR);
+    drawContours(img, contours, contourIdx, colour, thickness);
+    Mat imgS;
+    Size s = img.size();
+    resize(img, imgS, Size(s.width/3, s.height/3));
+    imshow("Contours", imgS);
+    waitKey(0);
+    destroyAllWindows();
+}
 
 Mat processImg(cv::Mat img){
     Mat blurredImg;
@@ -50,25 +102,26 @@ float calModeRadius(vector<float> v)
     return mode;
 }
 
- vector<vector<Point> > findCircleContours(Mat img){
+vector<vector<Point> > findCircleContours(Mat img)
+{
     vector<float> radii;
     float modeRadius;
     vector<vector<Point> > circleContours;
     Mat proccessedImg = processImg(img);
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
-    cv::findContours(proccessedImg, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_NONE);
+    findContours(proccessedImg, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_NONE);
 
     vector<Rect> boundRect(contours.size());
     unsigned int c;
     for ( c=0 ; c < contours.size() ; c++ ){
-        boundRect[c] = cv::boundingRect(contours[c]);
+        boundRect[c] = boundingRect(contours[c]);
         float ar = boundRect[c].width / float(boundRect[c].height);
         if ( hierarchy[c][3] == -1 && boundRect[c].width >= minCircleW && boundRect[c].height >= minCircleH && ar >= 0.9 && ar <= 1.2 ){
-            double epsilon = 0.01 * cv::arcLength(contours[c], TRUE);
+            double epsilon = 0.01 * arcLength(contours[c], TRUE);
             vector<Point> approxCurve;
-            cv::approxPolyDP(contours[c], approxCurve, epsilon, TRUE);
-            double area = cv::contourArea(contours[c]);
+            approxPolyDP(contours[c], approxCurve, epsilon, TRUE);
+            double area = contourArea(contours[c]);
             if ( approxCurve.size() > 8 && approxCurve.size() < 20 && area > minCircleArea ){
                 Point2f center;
                 float radius;
@@ -84,7 +137,7 @@ float calModeRadius(vector<float> v)
 
     modeRadius = calModeRadius(radii);
     int i=0;
-    for(auto const& radius: radii){
+    for(auto const& radius : radii){
         if (abs(radius-modeRadius) > 1){
             circleContours.erase(circleContours.begin()+i);
             i--;
@@ -94,20 +147,48 @@ float calModeRadius(vector<float> v)
 
     cout << "Mode of radii: " << modeRadius << endl;
     cout << "Number of circles: " << nCircles << endl;
-    cvtColor(img,img,COLOR_GRAY2BGR);
-    cv::drawContours(img, circleContours, -1, Scalar(0,255,0), 2);
-    Mat imgS;
-    Size s = img.size();
-    cv::resize(img, imgS, cv::Size(s.width/3, s.height/3));
-    cv::imshow("Contours", imgS);
-    cv::waitKey(0);
-    cv::destroyAllWindows();
 
     return circleContours;
 }
 
-int singleImgLogic(cv::Mat img){
-    findCircleContours(img);
+vector<Point> findOuterMostFrameContour(Mat img)
+{
+    double area;
+    Mat proccessedImg = processImg(img);
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+    findContours(proccessedImg, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_NONE);
+
+    int iLargestRectContour = 0;
+    unsigned int i;
+    area = contourArea(contours[iLargestRectContour]);
+    for (i=0;i<contours.size();i++){
+        if (contourArea(contours[i]) > area){
+            iLargestRectContour = i;
+            area = contourArea(contours[iLargestRectContour]);
+        }
+    }
+    return contours[iLargestRectContour];
+}
+
+int qID = 0;
+int singleImgLogic(Mat img)
+{
+    vector<Point> outerMostFrameContour;
+    outerMostFrameContour = findOuterMostFrameContour(img);
+
+    vector< vector<Point> > circleContours;
+    circleContours = findCircleContours(img);
+
+    vector<choice> choices;
+    for (auto const& contour : circleContours){
+        choice cobj(qID, contour);
+        qID++;
+        choices.push_back(cobj);
+        cobj.printSelfInfo();
+    }
+    displayContourDrawings(img, circleContours, -1, Scalar(0,255,0), 2);
+
     return 0;
 }
 
