@@ -1,4 +1,5 @@
-# Multiple-Choice-OMR
+# Please see https://github.com/LemuelKL/Bubble-Sheet-OMR-OpenCV-Qt
+# [Depreacated] Multiple-Choice-OMR
 
 This is an OMR program that takes a multiple choice sheet template as input, and automatically recognizes the MC options, and finally group them into questions and assign them into meaningful orders.
 
